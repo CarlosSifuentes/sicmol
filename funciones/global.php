@@ -5,7 +5,7 @@
 $hostname_dbc = "localhost";
 $database_dbc = "sicmol";
 $username_dbc = "root";
-$password_dbc = "";
+$password_dbc = "C0l0mbi@";
 
 $mysqli = new mysqli($hostname_dbc, $username_dbc, $password_dbc, $database_dbc);
 
@@ -78,7 +78,7 @@ function isAuthorized($strUsers, $strGroups, $UserName, $UserGroup) {
     return $isValid;
 }
 
-    $MM_restrictGoTo = "http://".$_SERVER['HTTP_HOST']."/intranet/login.php";
+    $MM_restrictGoTo = "http://".$_SERVER['HTTP_HOST']."/sicmol/login.php";
 
 if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers, $_SESSION['MM_Username'], $_SESSION['MM_UserGroup'])))) {
     $MM_qsChar = "?";

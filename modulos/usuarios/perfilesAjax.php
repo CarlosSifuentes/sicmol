@@ -39,8 +39,17 @@ $perfiles = $mysqli->query($query_perfiles) or die($mysqli->error);
         <td><?php echo $id ?></td>
         <td><?php echo $nombre ?></td>
         <td><?php echo disponible($estado) ?></td>
-        <td></td>
+        <td>
+            <?php if ($estado==1){ ?>
+            <a href="javascript:void(0)" title="Deshabilitar" class="text-warning" onclick="deshabilitar('Perfil', <?php echo $id ?>, 0)"><i class="fa fa-ban"></i></a>
+            <?php }
+            else if ($estado==0){ ?>
+                <a href="javascript:void(0)" title="Habilitar" class="text-success" onclick="deshabilitar('Perfil', <?php echo $id ?>, 1)"><i class="fa fa-check"></i></a>
+            <?php } ?>
+            <a href="javascript:void(0)" title="Eliminar" class="text-danger" onclick="deshabilitar('Perfil', <?php echo $id ?>, 2)"><i class="fa fa-trash-alt"></i></a>
+        </td>
     </tr>
     <?php } ?>
     </tbody>
 </table>
+<div class="text-muted">Sólo es posible eliminar registros que no se hayan usado en la generación de usuarios...</div>

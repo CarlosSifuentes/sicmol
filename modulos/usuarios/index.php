@@ -1,5 +1,5 @@
 <?php
-include '../../funciones/global.php';
+require_once '../../funciones/global.php';
 //Validar permiso para acceder
 //acceso('HFC', $s_app, $ruta_actual);
 
@@ -17,6 +17,9 @@ if ($nombre_app == ''){
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta http-equiv="expires" content="43200"/>
     <title><?php echo $titulo_pag ?></title>
     <link rel="shortcut icon" type="image/x-icon" href="../../favicon.ico">
@@ -50,9 +53,7 @@ if ($nombre_app == ''){
 <!--inicio Contenido principal-->
 <div class="container" id="mainContainer">
     <div class="card">
-        <div class="card-header pb-0">
-            <h5 class="text-app pl-1 pt-1">Inicio</h5>
-        </div>
+        <h5 class=" card-header text-app">Inicio</h5>
         <div class="card-body">
 
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -105,6 +106,9 @@ if ($nombre_app == ''){
     </div>
 </div>
 <!--fin Contenido principal-->
+<!--Inicio footer-->
+<?php include '../../footer-app.php' ?>
+<!--Fin footer-->
 
 <!--Modal nuevoUsuario.php-->
 <div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-hidden="true">
@@ -129,6 +133,7 @@ if ($nombre_app == ''){
 <!--fin Modal nuevoUsuario.php-->
 
 <!--Modal newSedeAreaPerfil-->
+<input type="hidden" id="op">
 <div class="modal fade" id="modalSedeAreaPerfil" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
         <div class="modal-content">
@@ -141,14 +146,14 @@ if ($nombre_app == ''){
             <div class="modal-body" id="modalSedeAreaPerfil-Contenido">
                 <div class="row">
                     <div class="form-group col">
-                        <label for="nombre_1">Nombre</label>
-                        <input type="text" class="form-control form-control-sm" id="nombre_1" name="nombre_1">
+                        <label for="nombre_sap">Nombre</label>
+                        <input type="text" class="form-control form-control-sm" id="nombre_sap" name="nombre_sap">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="far fa-window-close"></i> Cerrar</button>
-                <button type="button" class="btn btn-success"><i class="fa fa-save"></i> Guardar cambios</button>
+                <button type="button" class="btn btn-success" id="save-sap-btn"><i class="fa fa-save"></i> Guardar cambios</button>
             </div>
         </div>
     </div>
@@ -162,25 +167,57 @@ if ($nombre_app == ''){
 <script type="text/javascript" src="../../js/all.min.js"></script>
 <script type="text/javascript" src="../../js/global.js"></script>
 <script type="text/javascript" src="../../js/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="../../js/sweetalert2.all.min.js"></script>
 <?php include '../../js/current_time.js' ?>
 <!--Scripts-->
 <script>
+    var $perfiles_tab = $('#perfiles-tab');
+    var $perfiles = $('#perfiles');
     $(function () {
-        var $perfiles_tab = $('#perfiles-tab');
-        let $perfiles = $('#perfiles');
-
         $perfiles_tab.click(function () {
             $perfiles.load('perfilesAjax.php');
         })
 
         $('#newperfil-btn').click(function () {
             $('#modalSedeAreaPerfil-Titulo').html('Nuevo perfil');
+            $('#op').val('Perfil');
             $('#modalSedeAreaPerfil').modal({
                 backdrop:'static',
                 keyboard:false
             });
         })
+
+        $('#nombre_sap').change(function () {
+            validar_sap();
+        })
     })
+
+    $('#save-sap-btn').click(function (e) {
+        var $nombre = $('#nombre_sap');
+        if ($nombre.val().length<2){
+            $nombre.focus();
+            swal_validar('Debes ingresar un nombre');
+            return false;
+        }
+        e.preventDefault();
+
+        let op = $('#op').val();
+        let formdata = 'nombre='+$nombre.val()+'&op='+op;
+        $.ajax({
+            url:'newSedeAreaPerfil.php',
+            type: 'POST',
+            data:formdata,
+            cache: false,
+            dataType:'json',
+            success: function (data) {
+                swal_ok(data[0]+' agregado/a correctamente');
+                $nombre.val('');
+                $('#modalSedeAreaPerfil').modal('hide');
+                $('#'+data[1]).load(data[2]);
+            }
+        })
+    })
+
     function nuevoUsuario() {
         $('#modalAgregar').modal({
             backdrop:'static',
@@ -188,6 +225,42 @@ if ($nombre_app == ''){
         });
         $('#modalAgregar-Contenido').load('nuevoUsuario.php')
 
+    }
+
+    function validar_sap(){
+        var nombre = $("#nombre_sap").val();
+        let op = $('#op').val();
+        $.ajax({
+            url: 'newSedeAreaPerfil.php',
+            type: 'POST',
+            data:{
+                'nombre':nombre,'op':op,'val':1
+            },
+            success: function(data){
+                if (data==1){
+                    $("#save-sap-btn").prop("disabled", true);
+                    $('#nombre_sap').focus();
+                    swal_validar('El nombre ingresado ya existe');
+                } else {
+                    $("#save-sap-btn").prop("disabled", false);
+                }
+            }
+        });
+    }
+
+    function deshabilitar(op, id, del) {
+        $.ajax({
+            url: 'newSedeAreaPerfil.php',
+            type: 'POST',
+            data:{
+                'op':op,'del':del,'id':id
+            },
+            dataType:'json',
+            success: function(data){
+                swal_ok(data[0]);
+                $('#'+data[1]).load(data[2]);
+            }
+        });
     }
 </script>
 </body>

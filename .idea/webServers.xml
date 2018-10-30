@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="0a56663f-c883-42a8-861e-597619e3dda9" name="gescob" url="http://192.169.0.98/sicmol">
+        <fileTransfer host="192.169.0.98" port="22" rootFolder="/var/www/html/sicmol" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

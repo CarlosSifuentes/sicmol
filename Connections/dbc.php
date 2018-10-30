@@ -6,7 +6,7 @@
 $hostname_dbc = "localhost";
 $database_dbc = "sicmol";
 $username_dbc = "root";
-$password_dbc = "";
+$password_dbc = "C0l0mbi@";
 
 $mysqli = new mysqli($hostname_dbc, $username_dbc, $password_dbc, $database_dbc);
 
@@ -18,4 +18,4 @@ if ($mysqli->connect_errno) {
     exit;
 }
 
-$mysqli->set_charset("utf8");
+$mysqli->set_charset('utf8');

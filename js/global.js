@@ -21,7 +21,7 @@ $(function(){
 
 function changeClassContainer() {
     let mainContainerWidth = $(window).width();
-    let $container = $('#mainContainer, #topContainer');
+    let $container = $('#mainContainer, #topContainer, #bottomContainer');
     if (mainContainerWidth < 1201) {
         $container.removeClass('container');
         $container.addClass('container-fluid');
@@ -70,6 +70,22 @@ function swal_validar(texto) {
         title: 'Error',
         text: texto,
         type: 'error',
+        showCancelButton: false,
+        confirmButtonText: 'Cerrar',
+        reverseButtons: true
+    });
+}
+
+function swal_ok(texto) {
+    const swalWithBootstrapButtons = swal.mixin({
+        confirmButtonClass: 'btn btn-success',
+        buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons({
+        title: '¡Hecho!',
+        text: texto,
+        type: 'success',
         showCancelButton: false,
         confirmButtonText: 'Cerrar',
         reverseButtons: true
