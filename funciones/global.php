@@ -704,7 +704,7 @@ function acceso($app, $permisos, $ruta){
 }
 
 function disponible($i){
-    if ($i == 0){$disponible = 'No nisponible';}
+    if ($i == 0){$disponible = 'No disponible';}
     else if ($i == 1){$disponible = 'Disponible';}
     return $disponible;
 }

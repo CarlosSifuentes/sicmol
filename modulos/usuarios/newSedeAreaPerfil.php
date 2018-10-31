@@ -15,6 +15,8 @@ if ($op === 'Perfil') {
     $table = 'areas';
 } else if ($op === 'Sede') {
     $table = 'sedes';
+ } else if ($op === 'Módulo') {
+    $table = 'modulos';
 }
 
 if (isset($_POST['val'])){
@@ -44,13 +46,34 @@ elseif (isset($_POST['del'])){
     exit();
 }
 else {
-    $nombre = "'".$_POST['nombre']."'";
-    $insert = 'INSERT INTO '.$table.' SET nombre='.$nombre;
-    if (!$mysqli->query($insert)) {
-        printf("Error: %s\n", $mysqli->error);
-    } else {
-        $result = array($op, $table);
-        echo json_encode($result);
-        exit();
+
+    if ($op=='Módulo'){
+        $app = "'".$_POST['app']."'";
+        $tclientes = "'".$_POST['tclientes']."'";
+        $tgestiones = "'".$_POST['tgestiones']."'";
+        $tventas = "'".$_POST['tventas']."'";
+        $insert = 'INSERT INTO 
+        '.$table.' 
+        SET 
+        app='.$app.', 
+        tclientes='.$tclientes.', 
+        tgestiones='.$tgestiones.', 
+        tventas='.$tventas;
+        if (!$mysqli->query($insert)) {
+           printf("Error: %s\n", $mysqli->error);
+        } else {
+            echo $op.' agregado correctamente';
+            exit();
+        }
+
+    } else {$nombre = "'".$_POST['nombre']."'";
+        $insert = 'INSERT INTO '.$table.' SET nombre='.$nombre;
+        if (!$mysqli->query($insert)) {
+            printf("Error: %s\n", $mysqli->error);
+        } else {
+            $result = array($op, $table);
+            echo json_encode($result);
+            exit();
+        }
     }
 }

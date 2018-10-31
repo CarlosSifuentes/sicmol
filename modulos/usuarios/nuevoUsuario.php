@@ -5,116 +5,211 @@
  * Date: 28/10/2018
  * Time: 9:42 PM
  */
+require_once '../../funciones/global.php';
+
+if (isset($_POST['val'])){
+    $usuario = "'".$_POST['usuario']."'";
+    $query_val = 'SELECT id FROM empleados WHERE estado=1 AND usuario='.$usuario;
+    $val = $mysqli->query($query_val);
+    if ($val->num_rows>0){
+        echo 1;
+    } else {
+        echo 0;
+    }
+    exit();
+}
+
+$query_sedes =
+    'SELECT
+    id,
+    nombre
+    FROM
+    sedes
+    WHERE
+    estado = 1
+    ORDER BY 
+    nombre';
+$sedes= $mysqli->query($query_sedes) or die ($mysqli->error);
+
+$query_areas =
+    'SELECT
+    id,
+    nombre
+    FROM
+    areas
+    WHERE
+    estado = 1
+    ORDER BY 
+    nombre';
+$areas = $mysqli->query($query_areas) or die ($mysqli->error);
+
+$query_perfiles =
+    'SELECT
+    id,
+    nombre
+    FROM
+    perfiles
+    WHERE
+    estado = 1
+    ORDER BY 
+    nombre';
+$perfiles = $mysqli->query($query_perfiles) or die ($mysqli->error);
+
+$query_apps =
+    'SELECT
+    app
+    FROM
+    modulos
+    WHERE
+    estado = 1
+    ORDER BY 
+    app';
+$apps = $mysqli->query($query_apps) or die ($mysqli->error);
+
 ?>
 <div class="row">
     <div class="col">
         <div class="row tiny-gutters">
             <div class="form-group col-6">
-                <label for="nombre_1">Nombre 1</label>
-                <input type="text" class="form-control form-control-sm" id="nombre_1" name="nombre_1">
+                <label for="txt-nombre_1">Nombre 1</label>
+                <input type="text" class="form-control form-control-sm" id="txt-nombre_1" name="txt-nombre_1">
             </div>
             <div class="form-group col">
                 <label for="nombre_2">Nombre 2</label>
-                <input type="text" class="form-control form-control-sm" id="nombre_2" name="nombre_2">
+                <input type="text" class="form-control form-control-sm" id="txt-nombre_2" name="txt-nombre_2">
             </div>
         </div>
         <div class="row tiny-gutters">
             <div class="form-group col-6">
-                <label for="apellido_paterno">Apellido paterno</label>
-                <input type="text" class="form-control form-control-sm" id="apellido_paterno" name="apellido_paterno">
+                <label for="txt-apellido_paterno">Apellido paterno</label>
+                <input type="text" class="form-control form-control-sm" id="txt-apellido_paterno" name="txt-apellido_paterno">
             </div>
             <div class="form-group col">
-                <label for="apellido_materno">Apellido materno</label>
-                <input type="text" class="form-control form-control-sm" id="apellido_materno" name="apellido_materno">
+                <label for="txt-apellido_materno">Apellido materno</label>
+                <input type="text" class="form-control form-control-sm" id="txt-apellido_materno" name="txt-apellido_materno">
             </div>
         </div>
         <div class="row tiny-gutters">
             <div class="form-group col-6">
-                <label for="dni">DNI</label>
-                <input type="text" class="form-control form-control-sm" id="dni" name="dni">
+                <label for="txt-dni">DNI</label>
+                <input type="text" class="form-control form-control-sm" id="txt-dni" name="txt-dni" maxlength="8">
             </div>
             <div class="form-group col">
-                <label for="fecha_nac">Fecha nacimiento</label>
-                <input type="text" class="form-control form-control-sm" id="fecha_nac" name="fecha_nac">
-            </div>
-        </div>
-        <div class="row tiny-gutters">
-            <div class="form-group col">
-                <label for="direccion">Dirección</label>
-                <input type="text" class="form-control form-control-sm" id="direccion" name="direccion">
+                <label for="txt-fecha_nac">Fecha nacimiento</label>
+                <input type="text" class="form-control form-control-sm" id="txt-fecha_nac" name="txt-fecha_nac">
             </div>
         </div>
         <div class="row tiny-gutters">
             <div class="form-group col">
-                <label for="correo">Correo electrónico</label>
-                <input type="text" class="form-control form-control-sm" id="correo" name="correo">
+                <label for="txt-direccion">Dirección</label>
+                <input type="text" class="form-control form-control-sm" id="txt-direccion" name="txt-direccion">
+            </div>
+        </div>
+        <div class="row tiny-gutters">
+            <div class="form-group col">
+                <label for="txt-correo">Correo electrónico</label>
+                <input type="text" class="form-control form-control-sm" id="txt-correo" name="txt-correo">
             </div>
         </div>
     </div>
     <div class="col-6 border-left">
         <div class="row tiny-gutters">
             <div class="form-group col-6">
-                <label for="usuario">Nombre de usuario</label>
-                <input type="text" class="form-control form-control-sm" id="usuario" name="usuario">
+                <label for="txt-usuario">Usuario</label>
+                <input type="text" class="form-control form-control-sm" id="txt-usuario" name="txt-usuario">
             </div>
             <div class="form-group col">
-                <label for="clave">Contraseña</label>
-                <input type="password" class="form-control form-control-sm" id="clave" name="clave">
+                <label for="txt-clave">Contraseña</label>
+                <input type="password" class="form-control form-control-sm" id="txt-clave" name="txt-clave">
             </div>
         </div>
         <div class="row tiny-gutters">
             <div class="form-group col-6">
-                <label for="usuario">Sede</label>
-                <select id="sede" name="sede" class="form-control form-control-sm">
-                    <option value="0">Elegir...</option>
-                </select>
-            </div>
-            <div class="form-group col">
-                <label for="clave">Area</label>
-                <select id="area" name="area" class="form-control form-control-sm">
-                    <option value="0">Elegir...</option>
-                </select>
-            </div>
-        </div>
-        <div class="row tiny-gutters">
-            <div class="form-group col-6">
-                <label for="usuario">Perfil</label>
-                <select id="perfil" name="perfil" class="form-control form-control-sm">
-                    <option value="0">Elegir...</option>
-                </select>
-            </div>
-            <div class="form-group col">
-                <label for="extension">Extensión</label>
-                <input type="text" class="form-control form-control-sm" id="extension" name="extension">
-            </div>
-        </div>
-        <div class="row tiny-gutters">
-            <div class="form-group col-6">
-                <label for="fecha_ingreso">Fecha ingreso</label>
-                <input type="text" class="form-control form-control-sm" id="fecha_ingreso" name="fecha_ingreso">
-            </div>
-            <div class="form-group col">
-            </div>
-        </div>
-        <div class="row tiny-gutters">
-            <div class="form-group col">
-                <label for="permisos">Permisos</label>
-                <select id="permisos" name="permisos" data-placeholder="Elegir permisos..." class="form-control form-control-sm" multiple style="width:350px;" tabindex="4">
+                <label for="sel-sede">Sede</label>
+                <select id="sel-sede" name="sel-sede" data-placeholder="Elegir sede" class="form-control form-control-sm">
                     <option value=""></option>
-                    <option value="United States">United States</option>
-                    <option value="United Kingdom">United Kingdom</option>
-                    <option value="Afghanistan">Afghanistan</option>
-                    <option value="Albania">Albania</option>
-                    <option value="Algeria">Algeria</option>
-                    <option value="American Samoa">American Samoa</option>
-                    <option value="Andorra">Andorra</option>
-                    <option value="Angola">Angola</option>
-                    <option value="Anguilla">Anguilla</option>
+                    <?php
+                    while ($row_sedes = $sedes->fetch_row()){
+                        $sede_id = $row_sedes[0];
+                        $sede_nom = $row_sedes[1];
+                        ?>
+                        <option value="<?php echo $sede_id ?>"><?php echo $sede_nom ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group col">
+                <label for="sel-area">Area</label>
+                <select id="sel-area" name="sel-area" data-placeholder="Elegir área" class="form-control form-control-sm">
+                    <option value=""></option>
+                    <?php
+                    while ($row_areas = $areas->fetch_row()){
+                        list ($area_id, $area_nom) = $row_areas;
+                        ?>
+                        <option value="<?php echo $area_id ?>"><?php echo $area_nom ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="row tiny-gutters">
+            <div class="form-group col-6">
+                <label for="sel-perfil">Perfil</label>
+                <select id="sel-perfil" name="sel-perfil" data-placeholder="Elegir perfil" class="form-control form-control-sm">
+                    <option value=""></option>
+                    <?php
+                    while ($row_perfiles = $perfiles->fetch_row()){
+                        list ($perfil_id, $perfil_nom) = $row_perfiles;
+                        ?>
+                        <option value="<?php echo $perfil_id ?>"><?php echo $perfil_nom ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group col">
+                <label for="txt-extension">Extensión</label>
+                <input type="text" class="form-control form-control-sm" id="txt-extension" name="txt-extension" maxlength="6">
+            </div>
+        </div>
+        <div class="row tiny-gutters pb-0">
+            <div class="form-group col-6">
+                <label for="txt-fecha_ingreso">Fecha ingreso</label>
+                <input type="text" class="form-control form-control-sm" id="txt-fecha_ingreso" name="txt-fecha_ingreso">
+            </div>
+            <div class="form-group col mb-0">
+                <label for="">Foto</label>
+                <div class="custom-file">
+                    <input id="file-foto" name="file-foto" type="file" class="custom-file-input">
+                    <label for="file-foto" class="custom-file-label text-truncate" style="height: 31px; padding: 3px !important;"></label>
+                </div>
+            </div>
+        </div>
+        <div class="row tiny-gutters">
+            <div class="form-group col">
+                <label for="sel-permisos">Permisos</label>
+                <select id="sel-permisos" name="sel-permisos" data-placeholder="Elegir permisos..." class="form-control form-control-sm" multiple style="width:350px;">
+                    <option value=""></option>
+                    <?php
+                    while ($row_apps = $apps->fetch_row()){
+                        $app_name = $row_apps[0];
+                    ?>
+                    <option value="<?php echo $app_name ?>"><?php echo $app_name ?></option>
+                    <?php } ?>
                 </select>
             </div>
         </div>
     </div>
 </div>
 <script>
-$('#sede, #area, #perfil #permisos').chosen({width:'100%'});
+$('#sel-sede, #sel-area, #sel-perfil, #sel-permisos').chosen({width:'100%'});
+campo_fecha('#txt-fecha_nac','-18Y', '-65Y');
+campo_fecha('#txt-fecha_ingreso','+0D', '-5Y');
+$('#txt-dni, #txt-extension').numeric({decimal:false,negative:false});
+
+
+$('#txt-usuario').change(function () {
+    validar_usuario();
+})
+
+$('.custom-file-input').on('change', function() {
+    let fileName = $(this).val().split('\\').pop();
+    $(this).next('.custom-file-label').addClass("selected").html(fileName);
+});
 </script>

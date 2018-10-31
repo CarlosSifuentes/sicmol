@@ -146,8 +146,34 @@ $(function($){
     $.datepicker.setDefaults($.datepicker.regional['es']);
 });
 
-function mayuscula() {
-    $('input[type=text]').val (function () {
+function mayuscula(field) {
+    $(field).val (function () {
         return this.value.toUpperCase();
     });
+}
+
+function minuscula(field) {
+    $(field).val (function () {
+        return this.value.toLowerCase();
+    });
+}
+
+
+function validate_input(minlength, maxlength, value){
+    var msg = '';
+
+    if (value.length<minlength) {
+        msg = ' debe tener al menos '+minlength+' caracteres';
+    }
+    else if (value.length>maxlength) {
+        msg = ' no debe tener más de '+maxlength+' caracteres';
+    }
+
+    return msg;
+}
+
+function validate_error(field, msg, name) {
+    $(field).focus();
+    $(field).addClass('validate_red');
+    swal_validar('El campo '+'"'+name+'"'+msg);
 }
