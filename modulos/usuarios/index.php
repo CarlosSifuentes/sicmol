@@ -79,13 +79,40 @@ if ($nombre_app == ''){
                         <a class="btn btn-primary btn-sm text-white"><i class="fa fa-plus"></i> Nuevo usuario</a>
                     </div>
                     <div class="tab-pane fade" id="modulo" role="tabpanel" aria-labelledby="profile-tab">
-                        <a class="btn btn-primary btn-sm text-white"><i class="fa fa-plus"></i> Nuevo módulo</a>
+                        <div class="row">
+                            <div class="col-6 text-left mb-2">
+                                <h5>Lista de módulos</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a href="javascript:void(0)" id="newmodulo-btn" class="btn btn-primary btn-sm text-white"><i class="fa fa-plus"></i> Nuevo módulo</a>
+                            </div>
+                        </div>
+                        <div id="modulos">
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="sede" role="tabpanel" aria-labelledby="contact-tab">
-                        <a class="btn btn-primary btn-sm text-white"><i class="fa fa-plus"></i> Nueva sede</a>
+                        <div class="row">
+                            <div class="col-6 text-left mb-2">
+                                <h5>Lista de sedes</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a href="javascript:void(0)" id="newsede-btn" class="btn btn-primary btn-sm text-white"><i class="fa fa-plus"></i> Nueva Sede</a>
+                            </div>
+                        </div>
+                        <div id="sedes">
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="area" role="tabpanel" aria-labelledby="contact-tab">
-                        <a class="btn btn-primary btn-sm text-white"><i class="fa fa-plus"></i> Nueva área</a>
+                        <div class="row">
+                            <div class="col-6 text-left mb-2">
+                                <h5>Lista de áreas</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a href="javascript:void(0)" id="newarea-btn" class="btn btn-primary btn-sm text-white"><i class="fa fa-plus"></i> Nueva área</a>
+                            </div>
+                        </div>
+                        <div id="areas">
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="perfil" role="tabpanel" aria-labelledby="contact-tab">
                         <div class="row">
@@ -96,7 +123,6 @@ if ($nombre_app == ''){
                                 <a href="javascript:void(0)" id="newperfil-btn" class="btn btn-primary btn-sm text-white"><i class="fa fa-plus"></i> Nuevo perfil</a>
                             </div>
                         </div>
-
                         <div id="perfiles">
                         </div>
                     </div>
@@ -131,6 +157,27 @@ if ($nombre_app == ''){
     </div>
 </div>
 <!--fin Modal nuevoUsuario.php-->
+
+<!--Modal nuevoModulo.php-->
+<div class="modal fade" id="modalAgregarModulo" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header pb-2 pt-2">
+                <h5 class="modal-title text-app">Nuevo módulo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalAgregarModulo-Contenido">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="far fa-window-close"></i> Cerrar</button>
+                <button type="button" class="btn btn-success"><i class="fa fa-save"></i> Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--fin Modal nuevoModulo.php-->
 
 <!--Modal newSedeAreaPerfil-->
 <input type="hidden" id="op">
@@ -173,9 +220,40 @@ if ($nombre_app == ''){
 <script>
     var $perfiles_tab = $('#perfiles-tab');
     var $perfiles = $('#perfiles');
+
+    var $areas_tab = $('#areas-tab');
+    var $areas = $('#areas');
+
+    var $sedes_tab = $('#sedes-tab');
+    var $sedes = $('#sedes');
+
+    var $modulos_tab = $('#modulos-tab');
+    var $modulos = $('#modulos');
+
     $(function () {
         $perfiles_tab.click(function () {
-            $perfiles.load('perfilesAjax.php');
+            $perfiles.load('SAP-Ajax.php?op=Perfil');
+        })
+
+        $areas_tab.click(function () {
+            $areas.load('SAP-Ajax.php?op=Área');
+        })
+
+        $sedes_tab.click(function () {
+            $sedes.load('SAP-Ajax.php?op=Sede');
+        })
+
+        $modulos_tab.click(function () {
+            $modulos.load('modulosAjax.php');
+        })
+
+        $('#newsede-btn').click(function () {
+            $('#modalSedeAreaPerfil-Titulo').html('Nueva sede');
+            $('#op').val('Sede');
+            $('#modalSedeAreaPerfil').modal({
+                backdrop:'static',
+                keyboard:false
+            });
         })
 
         $('#newperfil-btn').click(function () {
@@ -187,8 +265,25 @@ if ($nombre_app == ''){
             });
         })
 
+        $('#newarea-btn').click(function () {
+            $('#modalSedeAreaPerfil-Titulo').html('Nueva área');
+            $('#op').val('Área');
+            $('#modalSedeAreaPerfil').modal({
+                backdrop:'static',
+                keyboard:false
+            });
+        })
+
         $('#nombre_sap').change(function () {
             validar_sap();
+        })
+    })
+
+    $('#newmodulo-btn').click(function () {
+        $('#modalAgregarModulo-Contenido').load('nuevoModulo.php');
+        $('#modalAgregarModulo').modal({
+            backdrop: 'static',
+            keyboard: false
         })
     })
 
@@ -213,7 +308,7 @@ if ($nombre_app == ''){
                 swal_ok(data[0]+' agregado/a correctamente');
                 $nombre.val('');
                 $('#modalSedeAreaPerfil').modal('hide');
-                $('#'+data[1]).load(data[2]);
+                $('#'+data[1]).load('SAP-Ajax.php?op='+data[0]);
             }
         })
     })
@@ -224,6 +319,15 @@ if ($nombre_app == ''){
             keyboard:false
         });
         $('#modalAgregar-Contenido').load('nuevoUsuario.php')
+
+    }
+
+    function nuevoModulo() {
+        $('#modalAgregar').modal({
+            backdrop:'static',
+            keyboard:false
+        });
+        $('#modalAgregarModulo-Contenido').load('nuevoModulo.php')
 
     }
 
@@ -258,7 +362,10 @@ if ($nombre_app == ''){
             dataType:'json',
             success: function(data){
                 swal_ok(data[0]);
-                $('#'+data[1]).load(data[2]);
+                $('#'+data[1]).load('SAP-Ajax.php?op='+data[2]);
+            },
+            error: function () {
+                swal_validar('No es posible eliminar este registro');
             }
         });
     }

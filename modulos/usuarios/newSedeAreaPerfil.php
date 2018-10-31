@@ -11,10 +11,14 @@ $op = $_POST['op'];
 
 if ($op === 'Perfil') {
     $table = 'perfiles';
-    $ajax = 'perfilesAjax.php';
+} else if ($op === 'Área') {
+    $table = 'areas';
+} else if ($op === 'Sede') {
+    $table = 'sedes';
 }
 
 if (isset($_POST['val'])){
+    $nombre = "'".$_POST['nombre']."'";
     $query_val = 'SELECT id FROM '.$table.' WHERE nombre='.$nombre;
     $val = $mysqli->query($query_val);
     if ($val->num_rows>0){
@@ -29,14 +33,13 @@ elseif (isset($_POST['del'])){
     $del = $_POST['del'];
     if (in_array($del, array(0,1))){
         $disable = 'UPDATE '.$table.' SET estado='.$del.' WHERE id='.$id;
-        $mysqli->query($disable) or die ($mysqli->error);
-        $msg = $op.' actualizado correctamente';
+        $msg = 'Estado de '.$op.' actualizado correctamente';
     } else if ($del==2){
         $disable = 'DELETE FROM '.$table.' WHERE id='.$id;
-        $mysqli->query($disable) or die ($mysqli->error);
         $msg = $op.' elimnado correctamente';
     }
-    $result = array($msg, $table, $ajax);
+    $mysqli->query($disable) or die ($mysqli->error);
+    $result = array($msg, $table, $op);
     echo json_encode($result);
     exit();
 }
@@ -46,7 +49,7 @@ else {
     if (!$mysqli->query($insert)) {
         printf("Error: %s\n", $mysqli->error);
     } else {
-        $result = array($op, $table, $ajax);
+        $result = array($op, $table);
         echo json_encode($result);
         exit();
     }
