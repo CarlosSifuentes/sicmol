@@ -65,4 +65,6 @@ $perfiles = $mysqli->query($query_perfiles) or die($mysqli->error.error_mysql($q
     <?php } ?>
     </tbody>
 </table>
-<div class="text-muted">Sólo es posible eliminar registros que no se hayan usado en la generación de usuarios...</div>
+<div class="alert alert-info" role="alert">
+    <i class="fa fa-bell"></i> Sólo es posible eliminar registros que no se hayan usado en la generación de usuarios...
+</div>

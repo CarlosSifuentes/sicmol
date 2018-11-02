@@ -143,7 +143,7 @@ if ($nombre_app == ''){
 <!--Fin footer-->
 
 <!--Modal nuevoUsuario.php-->
-<form id="form-nuevoUsuario">
+<form id="form-nuevoUsuario" name="form-nuevoUsuario" method="post">
 <div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -154,7 +154,7 @@ if ($nombre_app == ''){
                 </button>
             </div>
             <div class="modal-body" id="modalAgregar-Contenido">
-                ...
+                Cargando formulario...
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm btn-close" data-dismiss="modal">Cerrar</button>
@@ -240,7 +240,12 @@ if ($nombre_app == ''){
     var $modulos_tab = $('#modulos-tab');
     var $modulos = $('#modulos');
 
+    var $usuarios_tab = $('#usuarios-tab');
+    var $usuario = $('#usuarios');
+
     $(function () {
+        $usuario.load('usuariosAjax.php');
+
         $perfiles_tab.click(function () {
             $perfiles.load('SAP-Ajax.php?op=Perfil');
         })
@@ -255,6 +260,10 @@ if ($nombre_app == ''){
 
         $modulos_tab.click(function () {
             $modulos.load('modulosAjax.php');
+        })
+
+        $usuarios_tab.click(function () {
+            $usuario.load('usuariosAjax.php');
         })
 
         $('#newsede-btn').click(function () {
@@ -407,8 +416,7 @@ if ($nombre_app == ''){
         var $fotoVal = $foto.val();
         var $permisosVal = $permisos.val();
 
-
-        let nombre_1Eval = validate_input(2, 20, $nombre_1Val);
+        let nombre_1Eval = validate_input(2, 90, $nombre_1Val);
         if (nombre_1Eval !== ''){
             validate_error($nombre_1, nombre_1Eval, 'Nombre 1');
             return false
@@ -416,7 +424,7 @@ if ($nombre_app == ''){
             $($nombre_1).removeClass('validate_red');
         }
 
-        let apellido_1Eval = validate_input(2, 20, $apellido_1Val);
+        let apellido_1Eval = validate_input(2, 90, $apellido_1Val);
         if (apellido_1Eval !== ''){
             validate_error($apellido_1, apellido_1Eval, 'Apellido paterno');
             return false
@@ -424,12 +432,115 @@ if ($nombre_app == ''){
             $($apellido_1).removeClass('validate_red');
         }
 
-        /*validate($apellido_1, 2, 20, $apellido_1Val);
-        validate($apellido_2, 2, 20, $apellido_2Val);
-        validate($dni, 8, 8, $dniVal);
-        validate($fecha_nac, 10, 10, $fecha_nacVal);*/
+        let apellido_2Eval = validate_input(2, 90, $apellido_2Val);
+        if (apellido_2Eval !== ''){
+            validate_error($apellido_2, apellido_2Eval, 'Apellido materno');
+            return false
+        } else {
+            $($apellido_2).removeClass('validate_red');
+        }
+
+        let dniEval = validate_input(8, 8, $dniVal);
+        if (dniEval !== ''){
+            validate_error($dni, dniEval, 'DNI');
+            return false
+        } else {
+            $($dni).removeClass('validate_red');
+        }
+
+        let fecha_nacEval = validate_input(10, 10, $fecha_nacVal);
+        if (fecha_nacEval !== ''){
+            validate_error($fecha_nac, fecha_nacEval, 'Fecha de nacimiento');
+            return false
+        } else {
+            $($fecha_nac).removeClass('validate_red');
+        }
+
+        let usuarioEval = validate_input(5, 20, $usuarioVal);
+        if (usuarioEval !== ''){
+            validate_error($usuario, usuarioEval, 'Usuario');
+            return false
+        } else {
+            $($usuario).removeClass('validate_red');
+        }
+
+        let claveEval = validate_input(8, 20, $claveVal);
+        if (claveEval !== ''){
+            validate_error($clave, claveEval, 'Contraseña');
+            return false
+        } else {
+            $($clave).removeClass('validate_red');
+        }
+
+        let sedeEval = validate_select($sedeVal);
+        if (sedeEval !== ''){
+            validate_error($sede, sedeEval, 'Sede');
+            return false
+        } else {
+            $($sede).removeClass('validate_red');
+        }
+
+        let areaEval = validate_select($areaVal);
+        if (areaEval !== ''){
+            validate_error($area, areaEval, 'Área');
+            return false
+        } else {
+            $($area).removeClass('validate_red');
+        }
+
+        let perfilEval = validate_select($perfilVal);
+        if (perfilEval !== ''){
+            validate_error($perfil, perfilEval, 'Perfil');
+            return false
+        } else {
+            $($perfil).removeClass('validate_red');
+        }
+
+        let extensionEval = validate_num(200, 9999, $extensionVal);
+        if (extensionEval !== ''){
+            validate_error($extension, extensionEval, 'Extensión');
+            return false
+        } else {
+            $($extension).removeClass('validate_red');
+        }
+
+        let fecha_ingresoEval = validate_input(10, 10, $fecha_ingresoVal);
+        if (fecha_ingresoEval !== ''){
+            validate_error($fecha_ingreso, fecha_ingresoEval, 'Fecha de ingreso');
+            return false
+        } else {
+            $($fecha_ingreso).removeClass('validate_red');
+        }
+
+        let persmisosEval = validate_select($permisosVal);
+        if (persmisosEval !== ''){
+            validate_error($permisos, persmisosEval, 'Permisos');
+            return false
+        } else {
+            $($permisos).removeClass('validate_red');
+        }
 
         e.preventDefault()
+        let formData = new FormData(this);
+        $.ajax({
+            url: 'nuevoUsuario.php?new',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data){
+                swal_ok(data);
+               /*
+                if (data==1){
+                    $("#save-usuario-btn").prop("disabled", true);
+                    $('#txt-usuario').focus();
+                    swal_validar('El nombre de usuario ingresado ya existe');
+                } else {
+                    $("#save-usuario-btn").prop("disabled", false);
+                }
+                */
+            }
+        });
 
     })
 

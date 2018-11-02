@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="sicmol@192.169.0.98" uuid="bd6f741d-c012-40b4-89f2-78823ed02f4a">
+    <data-source source="LOCAL" name="sicmol@192.168.1.11" uuid="37cd667d-f2ad-4985-b6b2-8be5032197f0">
       <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mariadb://192.169.0.98:3306/sicmol</jdbc-url>
+      <jdbc-url>jdbc:mariadb://192.168.1.11:3306/sicmol</jdbc-url>
       <driver-properties>
         <property name="autoReconnect" value="true" />
         <property name="zeroDateTimeBehavior" value="convertToNull" />

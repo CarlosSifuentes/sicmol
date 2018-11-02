@@ -67,7 +67,7 @@ function swal_validar(texto) {
     })
 
     swalWithBootstrapButtons({
-        title: 'Error',
+        title: '¡Error!',
         text: texto,
         type: 'error',
         showCancelButton: false,
@@ -160,7 +160,7 @@ function minuscula(field) {
 
 
 function validate_input(minlength, maxlength, value){
-    var msg = '';
+    let msg = '';
 
     if (value.length<minlength) {
         msg = ' debe tener al menos '+minlength+' caracteres';
@@ -172,8 +172,39 @@ function validate_input(minlength, maxlength, value){
     return msg;
 }
 
+function validate_num(minval, maxval, value){
+    let msg = '';
+
+    if (value < minval) {
+        msg = ' debe tener un valor mayor o igual que '+minval;
+    }
+    else if (value > maxval) {
+        msg = ' debe tener un valor menor o igual que '+maxval;
+    }
+
+    return msg;
+}
+
+function validate_select(value){
+    let msg = '';
+
+    if (value < 1) {
+        msg = ' debe tener una opción seleccionada';
+    }
+
+    return msg;
+}
+
 function validate_error(field, msg, name) {
     $(field).focus();
+    $(field).trigger('chosen:activate');
     $(field).addClass('validate_red');
     swal_validar('El campo '+'"'+name+'"'+msg);
+}
+
+function texto_limpio(cadena) {
+    let s1 = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
+    let s2 = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+    for (let i = 0; i < s1.length; i++) cadena = cadena.replace(new RegExp(s1.charAt(i), 'g'), s2.charAt(i));
+    return cadena;
 }

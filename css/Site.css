@@ -289,5 +289,5 @@ body {
 
 .validate_red {
 	background-color: #f8d7da !important;
-	border-color: #ffa0a0;
+	border-color: #ffa0a0 !important;
 }

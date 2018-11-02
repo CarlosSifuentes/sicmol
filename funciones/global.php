@@ -708,3 +708,7 @@ function disponible($i){
     else if ($i == 1){$disponible = 'Disponible';}
     return $disponible;
 }
+
+function elimina_espacios($cadena){
+    return preg_replace('/( ){2,}/u',' ',$cadena);
+}
