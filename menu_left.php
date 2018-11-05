@@ -109,7 +109,7 @@ $ingresoP = formato_fecha($rPe['fecha_ingreso']);
     </div>
     <div style="padding: 5px;">
         <?php
-        echo "Estado: ";
+        echo $s_pausa."Estado: ";
         if ($s_pausa == 0){
             echo "<a href=\"http://".$_SERVER['HTTP_HOST']."/intranet/pausa.php?p=".$s_pausa."\" rel=\"modal:open\" title=\"Pausar gestión\">Disponible <i class=\"fa fa-pause\" aria-hidden=\"true\" style=\"color: red\"></i></a>";
         } else {

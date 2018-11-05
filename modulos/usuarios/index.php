@@ -31,6 +31,7 @@ if ($nombre_app == ''){
     <link href="../../css/Site.css" rel="stylesheet">
     <link href="../../fontawesome/css/all.min.css" rel="stylesheet">
     <link href="../../css/jquery-ui.min.css" rel="stylesheet">
+    <link href="../../css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" media="screen">
 </head>
 <body>
 
@@ -85,7 +86,7 @@ if ($nombre_app == ''){
                                 <a href="javascript:void(0)" id="newusuario-btn" class="btn btn-primary btn-sm text-white btn-new">Nuevo usuario</a>
                             </div>
                         </div>
-                        <div id="usuarios"></div>
+                        <div id="empleados"></div>
                     </div>
                     <div class="tab-pane fade" id="modulo" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="row">
@@ -144,6 +145,8 @@ if ($nombre_app == ''){
 
 <!--Modal nuevoUsuario.php-->
 <form id="form-nuevoUsuario" name="form-nuevoUsuario" method="post">
+    <input type="hidden" id="accion_usuario">
+    <input type="hidden" id="id" name="id">
 <div class="modal fade" id="modalAgregar" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -224,6 +227,7 @@ if ($nombre_app == ''){
 <script type="text/javascript" src="../../js/chosen.jquery.min.js"></script>
 <script type="text/javascript" src="../../js/sweetalert2.all.min.js"></script>
 <script type="text/javascript" src="../../js/jquery.numeric.js"></script>
+<script type="text/javascript" src="../../js/jquery.fancybox.min.js"></script>
 <?php include '../../js/current_time.js' ?>
 <!--Scripts-->
 <script>
@@ -241,7 +245,7 @@ if ($nombre_app == ''){
     var $modulos = $('#modulos');
 
     var $usuarios_tab = $('#usuarios-tab');
-    var $usuario = $('#usuarios');
+    var $usuario = $('#empleados');
 
     $(function () {
         $usuario.load('usuariosAjax.php');
@@ -308,6 +312,8 @@ if ($nombre_app == ''){
     })
 
     $('#newusuario-btn').click(function () {
+        $('#save-usuario-btn').show();
+        $('#accion_usuario').val('new');
         $('#modalAgregar-Contenido').load('nuevoUsuario.php');
         $('#modalAgregar').modal({
             backdrop: 'static',
@@ -456,7 +462,7 @@ if ($nombre_app == ''){
             $($fecha_nac).removeClass('validate_red');
         }
 
-        let usuarioEval = validate_input(5, 20, $usuarioVal);
+        let usuarioEval = validate_input(4, 20, $usuarioVal);
         if (usuarioEval !== ''){
             validate_error($usuario, usuarioEval, 'Usuario');
             return false
@@ -464,7 +470,7 @@ if ($nombre_app == ''){
             $($usuario).removeClass('validate_red');
         }
 
-        let claveEval = validate_input(8, 20, $claveVal);
+        let claveEval = validate_input(6, 20, $claveVal);
         if (claveEval !== ''){
             validate_error($clave, claveEval, 'Contraseña');
             return false
@@ -520,25 +526,19 @@ if ($nombre_app == ''){
             $($permisos).removeClass('validate_red');
         }
 
-        e.preventDefault()
+        let accion = $('#accion_usuario').val();
+        e.preventDefault();
         let formData = new FormData(this);
         $.ajax({
-            url: 'nuevoUsuario.php?new',
+            url: 'nuevoUsuario.php?'+accion,
             type: 'POST',
             data: formData,
             processData: false,
             contentType: false,
             success: function(data){
                 swal_ok(data);
-               /*
-                if (data==1){
-                    $("#save-usuario-btn").prop("disabled", true);
-                    $('#txt-usuario').focus();
-                    swal_validar('El nombre de usuario ingresado ya existe');
-                } else {
-                    $("#save-usuario-btn").prop("disabled", false);
-                }
-                */
+                $('#modalAgregar').modal('hide');
+                $('#empleados').load('usuariosAjax.php');
             }
         });
 
@@ -597,6 +597,8 @@ if ($nombre_app == ''){
                 let url = 'SAP-Ajax.php?op='+data[2];
                 if (op==='Módulo'){
                     url = 'modulosAjax.php';
+                } else if (op==='Usuario'){
+                    url = 'usuariosAjax.php';
                 }
                 swal_ok(data[0]);
                 $('#'+data[1]).load(url);
@@ -605,6 +607,28 @@ if ($nombre_app == ''){
                 swal_validar('No es posible eliminar este registro');
             }
         });
+    }
+
+    function mod_usuario(id) {
+        $('#save-usuario-btn').show();
+        $('#accion_usuario').val('mod');
+        $('#id').val(id);
+        $('#modalAgregar-Contenido').load('nuevoUsuario.php?id='+id);
+        $('#modalAgregar').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+    }
+
+    function ver_usuario(id) {
+        $('#save-usuario-btn').hide();
+        $('#accion_usuario').val('view');
+        $('#id').val(id);
+        $('#modalAgregar-Contenido').load('nuevoUsuario.php?view&id='+id);
+        $('#modalAgregar').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
     }
 </script>
 </body>

@@ -17,6 +17,8 @@ if ($op === 'Perfil') {
     $table = 'sedes';
  } else if ($op === 'Módulo') {
     $table = 'modulos';
+} else if ($op === 'Usuario') {
+    $table = 'empleados';
 }
 
 if (isset($_POST['val'])){
@@ -30,7 +32,7 @@ if (isset($_POST['val'])){
     }
     exit();
 }
-elseif (isset($_POST['del'])){
+else if (isset($_POST['del'])){
     $id = $_POST['id'];
     $del = $_POST['del'];
     if (in_array($del, array(0,1))){

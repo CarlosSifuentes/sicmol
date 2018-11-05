@@ -12,13 +12,10 @@ $op = $_GET['op'];
 
 if ($op === 'Perfil') {
     $table = 'perfiles';
-    $ajax = 'perfilesAjax.php';
 } else if ($op === 'Área') {
     $table = 'areas';
-    $ajax = 'areasAjax.php';
 } else if ($op === 'Sede') {
     $table = 'sedes';
-    $ajax = 'sedesAjax.php';
 }
 
 $query_perfiles = '

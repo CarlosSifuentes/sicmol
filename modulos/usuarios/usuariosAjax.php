@@ -111,13 +111,15 @@ $usuarios = $mysqli->query($query_usuarios) or die ($mysqli->error);
         <td><?php echo $anombre ?></td>
         <td><?php echo disponible($estado) ?></td>
         <td>
+            <a href="javascript:void(0)" title="Ver datos" class="text-info" onclick="ver_usuario(<?php echo $id ?>)"><i class="fa fa-search"></i></a>
             <?php if ($estado==1){ ?>
-                <a href="javascript:void(0)" title="Deshabilitar" class="text-warning" onclick="deshabilitar('Módulo', <?php echo $id ?>, 0)"><i class="fa fa-ban"></i></a>
+                <a href="javascript:void(0)" title="Deshabilitar" class="text-warning" onclick="deshabilitar('Usuario', <?php echo $id ?>, 0)"><i class="fa fa-ban"></i></a>
+                <a href="javascript:void(0)" title="Modificar datos" class="text-info" onclick="mod_usuario(<?php echo $id ?>)"><i class="far fa-edit"></i></a>
             <?php }
             else if ($estado==0){ ?>
-                <a href="javascript:void(0)" title="Habilitar" class="text-success" onclick="deshabilitar('Módulo', <?php echo $id ?>, 1)"><i class="fa fa-check"></i></a>
+                <a href="javascript:void(0)" title="Habilitar" class="text-success" onclick="deshabilitar('Usuario', <?php echo $id ?>, 1)"><i class="fa fa-check"></i></a>
             <?php } ?>
-            <a href="javascript:void(0)" title="Eliminar" class="text-danger" onclick="deshabilitar('Módulo', <?php echo $id ?>, 2)"><i class="fa fa-trash-alt"></i></a>
+            <a href="javascript:void(0)" title="Eliminar" class="text-danger" onclick="deshabilitar('Usuario', <?php echo $id ?>, 2)"><i class="fa fa-trash-alt"></i></a>
         </td>
     </tr>
     <?php } ?>

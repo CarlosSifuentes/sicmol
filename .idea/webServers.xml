@@ -10,8 +10,8 @@
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
-      <webServer id="94e2e768-9385-4bba-9a4b-b277317461a4" name="vmware" url="http://192.168.1.11">
-        <fileTransfer host="192.168.1.11" port="22" rootFolder="/var/www/html/sicmol" accessType="SFTP">
+      <webServer id="94e2e768-9385-4bba-9a4b-b277317461a4" name="vmware" url="http://mastermold">
+        <fileTransfer host="mastermold" port="22" rootFolder="/var/www/html/sicmol" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
           </advancedOptions>
