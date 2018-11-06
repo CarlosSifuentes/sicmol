@@ -17,6 +17,7 @@ $(function(){
         collapsible: true
     });
 
+    $('#motivoPausa').chosen({width:'100%'});
 });
 
 function changeClassContainer() {
@@ -208,3 +209,7 @@ function texto_limpio(cadena) {
     for (let i = 0; i < s1.length; i++) cadena = cadena.replace(new RegExp(s1.charAt(i), 'g'), s2.charAt(i));
     return cadena;
 }
+
+$('#anc_pausa').click(function () {
+    $('#modalPausa').modal()
+})

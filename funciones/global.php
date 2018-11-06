@@ -39,7 +39,7 @@ if ((isset($_GET['doLogout'])) &&($_GET['doLogout']=="true")){
     unset($_SESSION['MM_UserGroup']);
     unset($_SESSION['PrevUrl']);
 
-    $logoutGoTo = "login.php";
+    $logoutGoTo = "http://".$_SERVER['HTTP_HOST']."/sicmol/login.php";
     if ($logoutGoTo) {
         header("Location: $logoutGoTo");
         exit;
@@ -110,8 +110,17 @@ $s_pausa = 0;
 if (isset($_SESSION['pausa'])&&$_SESSION['pausa']==1){
     $s_pausa = $_SESSION['pausa'];
 } else {
-    $result_pausa = mysqli_query($mysqli, "SELECT pausa=1 FROM empleados WHERE id=".$s_id);
+    $result_pausa = mysqli_query($mysqli, "SELECT pausa FROM empleados WHERE pausa=1 AND id=".$s_id);
     $s_pausa = $result_pausa->num_rows;
+}
+
+function estado ($pausa){
+    if ($pausa === 0){
+        $estado = 'En línea <a href="javascript:void(0)" id="anc_pausa">Pausa</a>';
+    } else {
+        $estado = 'En pausa <a href="javascript:void(0)" id="anc_conectar">Conectar</a>';
+    }
+    return $estado;
 }
 
 function formato_fecha($fecha){
