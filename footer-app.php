@@ -1,5 +1,5 @@
 <?php
-$query_motivos = "SELECT id, nombre FROM rh_motivos_ausencia WHERE id>2";
+$query_motivos = 'SELECT id, nombre FROM rh_motivos_ausencia WHERE id > 2';
 $motivos = $mysqli->query($query_motivos);
 ?>
 <div class="container-fluid bg-light fixed-bottom p-2">

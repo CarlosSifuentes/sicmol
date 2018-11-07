@@ -287,6 +287,18 @@ body {
 	content: "\f055  ";
 }
 
+.btn-search:before{
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	content: "\f002  ";
+}
+
+.btn-sync:before {
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	content: "\f2f1  ";
+}
+
 .validate_red {
 	background-color: #f8d7da !important;
 	border-color: #ffa0a0 !important;
