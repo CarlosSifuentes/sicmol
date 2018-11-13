@@ -2,16 +2,20 @@
     font-family: 'custom-font';
     src: url('../fonts/roboto/Roboto-Regular.ttf');
 }
-
+*/
 @font-face {
 	font-family: 'custom-font-light';
-    src: url('../fonts/roboto/RobotoCondensed-Regular.ttf');
-}*/
+    src: url('../fonts/roboto/RobotoCondensed-Light.ttf');
+}
 
 body {
     padding-bottom: 20px;
 	margin-top: 63px;
     font-size: 0.8rem;
+}
+
+.font-slim{
+	font-family: 'custom-font-light';
 }
 
 /* Modificar Bootstrap */

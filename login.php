@@ -2,6 +2,37 @@
 require_once 'Connections/dbc.php';
 error_reporting(E_ALL);  ini_set("display_errors", 1);
 
+if (isset($_POST['option'])){
+    $option = $_POST['option'];
+    $op = $_POST['op'];
+    if ($option === 'Login'){
+        $username = $_POST['username'];
+        if ($op === '1'){
+            $query_username = "SELECT id FROM empleados WHERE usuario='".$username."'";
+            $result_username = $mysqli->query($query_username);
+            $existe = $result_username->num_rows;
+            if ($existe>0){
+                echo 'ok';
+            } else {
+                echo 'error';
+            }
+            die();
+        } else if ($op === '2'){
+            $password = $_POST['password'];
+            $query_login = "SELECT id FROM empleados WHERE BINARY  usuario='".$username."' AND BINARY clave='".$password."'";
+            $result_login = $mysqli->query($query_login);
+            $existe = $result_login->num_rows;
+            //die ($existeL);
+            if ($existe>0){
+                echo 'ok';
+            } else {
+                echo 'error';
+            }
+            die();
+        }
+    }
+}
+
 $ruta = $_SERVER['SCRIPT_NAME'];
 $ip = $_SERVER['REMOTE_ADDR'];
 
@@ -13,6 +44,11 @@ if (!isset($_SESSION)) {
 $loginFormAction = $_SERVER['PHP_SELF'];
 if (isset($_GET['accesscheck'])) {
     $_SESSION['PrevUrl'] = $_GET['accesscheck'];
+}
+
+function elimina_espacios($cadena){
+    //Eliminar espacios dentro de una frase
+    return preg_replace('/( ){2,}/u',' ',$cadena);
 }
 
 if (isset($_POST['username'])) {
@@ -65,20 +101,21 @@ if (isset($_POST['username'])) {
 
         if (PHP_VERSION >= 5.1) {session_regenerate_id(true);} else {session_regenerate_id();}
         //declare two session variables and assign them
-        $nombres = explode(" ", $row_user['nombre_1']);
         $_SESSION['MM_Username'] = $loginUsername;
         $_SESSION['MM_UserGroup'] = $loginStrGroup;
         $_SESSION['id'] = $row_user['id'];
         $_SESSION['sede'] = $row_user['sede'];
-        $_SESSION['nombres'] = $nombres[0];
-        $_SESSION['apellidos'] = $row_user['apellido_paterno'];
+        $_SESSION['nombres'] = elimina_espacios($row_user['nombre_1'].' '.$row_user['nombre_2']);
+        $_SESSION['apellidos'] = $row_user['apellido_paterno'].' '.$row_user['apellido_materno'];
+        $_SESSION['nombre_1'] = $row_user['nombre_1'];
+        $_SESSION['nombre_2'] = $row_user['nombre_2'];
+        $_SESSION['nombre_completo'] = elimina_espacios($row_user['nombre_1'].' '.$row_user['nombre_2'].' '.$row_user['apellido_paterno'].' '.$row_user['apellido_materno']);
         $_SESSION['area'] = $row_user['area'];
         $_SESSION['app'] = $row_user['app'];
         $_SESSION['perfil'] = $row_user['perfil'];
         $_SESSION['nivel'] = $row_user['nivel'];
         $_SESSION['ext'] = $row_user['extension'];
         $_SESSION['mail'] = $row_user['correo'];
-        $_SESSION['nombre_completo'] = $row_user['nombre_1'].' '.$row_user['nombre_2'].' '.$row_user['apellido_paterno'].' '.$row_user['apellido_materno'];
         $_SESSION['sede_nom'] = $row_user['s_sede'];
         $_SESSION['area_nom'] = $row_user['s_area'];
 
@@ -147,7 +184,7 @@ if (isset($_POST['username'])) {
 </head>
 
 <body class="text-center">
-<form id="form1" method="POST" action="" class="form-signin" style="background-color: #FFF; border-radius: 4px; padding-top: 20px">
+<form id="formLogin" method="POST" action="" class="form-signin" style="background-color: #FFF; border-radius: 4px; padding-top: 20px">
     <img class="mb-4" src="images/logo_mini.fw.png">
     <h5 class="h5 mb-3 font-weight-normal text-info">Iniciar sesión</h5>
     <div class="input-group">
@@ -159,7 +196,7 @@ if (isset($_POST['username'])) {
         </div>
     </div>
 
-    <div class="input-group mb-1">
+    <div class="input-group mb-1" style="display: none" id="div-password">
         <div class="input-group-prepend">
             <span class="input-group-text"><i class="fa fa-key fa-fw"></i></span>
         </div>
@@ -169,13 +206,17 @@ if (isset($_POST['username'])) {
         </div>
     </div>
 
-    <button class="btn btn-lg btn-info btn-block font-size-12" type="submit"><i class="fa fa-sign-in-alt"></i> Ingresar</button>
+    <button class="btn btn-lg btn-info btn-block font-size-12" type="submit" style="display: none" id="btn-save-login"><i class="fa fa-sign-in-alt"></i> Ingresar</button>
     <div class="padding-b5" style="padding-top: 10px">
         <small class="text-muted">&copy; 2016-2018</small>
     </div>
 </form>
 <script src="js/jquery-3.3.1.min.js"></script>
 <script src="js/all.min.js"></script>
+<script type="text/javascript" src="js/sweetalert2.all.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="js/global.js"></script>
 <script>
     function text() {
         var a=document.getElementById('password');
@@ -191,6 +232,52 @@ if (isset($_POST['username'])) {
             $('#button').addClass('fa-eye');
         }
     }
+
+    $('#username').blur(function () {
+        let username = $('#username').val();
+        $.ajax({
+            url:'login.php',
+            type:'POST',
+            data:{
+                'option':'Login',
+                'op':1,
+                'username':username
+            },
+            success(data){
+                if (data==='error'){
+                    $('#username').focus();
+                    $('#div-password, #btn-save-login').hide();
+                    swal_validar('El nombre de usuario ingresado no existe o no está activo')
+                } else {
+                    $('#div-password, #btn-save-login').show();
+                }
+            }
+        })
+    })
+
+    $('#btn-save-login').click(function (e) {
+        let username = $('#username').val();
+        let password = $('#password').val();
+        e.preventDefault();
+        $.ajax({
+            url:'login.php',
+            type:'POST',
+            data:{
+                'option':'Login',
+                'op':2,
+                'username':username,
+                'password':password
+            },
+            success(data){
+                if (data=='error'){
+                    $('#password').focus();
+                    swal_validar('Contraseña incorrecta, intente nuevamente');
+                } else {
+                    $('#formLogin').submit()
+                }
+            }
+        })
+    })
 </script>
 </body>
 </html>

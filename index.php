@@ -17,6 +17,7 @@ if ($nombre_app == ''){
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="expires" content="43200"/>
     <title><?php echo $titulo_pag ?></title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
@@ -24,7 +25,11 @@ if ($nombre_app == ''){
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
+    <link href="css/bootstrap.chosen.min.css" rel="stylesheet">
     <link href="css/Site.css" rel="stylesheet">
+    <link href="fontawesome/css/all.min.css" rel="stylesheet">
+    <link href="css/jquery-ui.min.css" rel="stylesheet">
+    <link href="css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" media="screen">
 </head>
 <body>
 
@@ -57,10 +62,16 @@ if ($nombre_app == ''){
     </div>
 </div>
 
+<!--Inicio footer-->
+<?php include 'footer-app.php' ?>
+<!--Fin footer-->
 <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="js/sweetalert2.all.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/all.min.js"></script>
+<script src="fontawesome/js/all.min.js"></script>
+<script type="text/javascript" src="js/js.cookie.js"></script>
 <script type="text/javascript" src="js/global.js"></script>
 <?php include 'js/current_time.js' ?>
 <script>

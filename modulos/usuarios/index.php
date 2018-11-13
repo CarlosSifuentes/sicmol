@@ -1,7 +1,7 @@
 <?php
 require_once '../../funciones/global.php';
 //Validar permiso para acceder
-//acceso('HFC', $s_app, $ruta_actual);
+acceso('ASS', $s_app, $ruta_actual);
 
 //Título de página
 $nombre_app = 'Usuarios';
@@ -12,6 +12,8 @@ if ($nombre_app == ''){
     $titulo_pag = $nombre_app.' - SICMOL';
 }
 
+//Escribir cookie con ruta actual
+setcookie('ruta', $ruta_actual,0,'/');
 ?>
 <!DOCTYPE html>
 <html>

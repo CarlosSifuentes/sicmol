@@ -98,27 +98,31 @@ $s_sede = $_SESSION['sede'];
 $s_sede_nom = $_SESSION['sede_nom'];
 $s_nombres = $_SESSION['nombres'];
 $s_apellidos = $_SESSION['apellidos'];
+$s_nombre_completo = $_SESSION['nombre_completo'];
+$s_nombre_1 = $_SESSION['nombre_1'];
+$s_nombre_2 = $_SESSION['nombre_2'];
 $s_area = $_SESSION['area'];
 $s_app = $_SESSION['app'];
 $s_perfil = $_SESSION['perfil'];
 $s_nivel = $_SESSION['nivel'];
 $s_ext = $_SESSION['ext'];
 $s_correo = $_SESSION['mail'];
-$s_nombre_completo = $_SESSION['nombre_completo'];
 
 $s_pausa = 0;
 if (isset($_SESSION['pausa'])&&$_SESSION['pausa']==1){
     $s_pausa = $_SESSION['pausa'];
 } else {
-    $result_pausa = mysqli_query($mysqli, "SELECT pausa FROM empleados WHERE pausa=1 AND id=".$s_id);
-    $s_pausa = $result_pausa->num_rows;
+    $sql_pausa = "SELECT pausa FROM empleados WHERE id=".$s_id;
+    $result_pausa = $mysqli->query($sql_pausa);
+    $row_pausa = $result_pausa->fetch_row();
+    $s_pausa = $row_pausa[0];
 }
-
+//die($s_pausa);
 function estado ($pausa){
-    if ($pausa === 0){
-        $estado = 'En línea <a href="javascript:void(0)" id="anc_pausa">Pausa</a>';
-    } else {
-        $estado = 'En pausa <a href="javascript:void(0)" id="anc_conectar">Conectar</a>';
+    if ($pausa == 0){
+        $estado = '<a href="javascript:void(0)" id="anc_pausa" title="En línea: Clic para Pausa" class="text-success"><i class="fa fa-user-check"></i></a>';
+    } else if ($pausa == 1) {
+        $estado = '<a href="javascript:void(0)" id="anc_conectar" title="En pausa: clic para reconectar" class="text-warning"><i class="fa fa-user-clock"></i></a>';
     }
     return $estado;
 }
@@ -603,6 +607,12 @@ function ago($time)
     return "Hace $diferencia $periodos[$j]";
 }
 
+function zerofill($mStretch, $iLength = 2)
+{
+    $sPrintfString = '%0' . (int)$iLength . 's';
+    return sprintf($sPrintfString, $mStretch);
+}
+
 function time_diff($start, $end="NOW")
 {
     $sdate = strtotime($start);
@@ -656,6 +666,59 @@ function time_diff($start, $end="NOW")
     return $timeshift;
 }
 
+function tiempo_transcurrido($start, $end="NOW")
+{
+    $sdate = strtotime($start);
+    $edate = strtotime($end);
+
+    $time = $edate - $sdate;
+    if($time>=0 && $time<=59) {
+        // Seconds
+        $timeshift = '00:00:'.zerofill($time);
+
+    } elseif($time>=60 && $time<=3599) {
+        // Minutes + Seconds
+        $pmin = ($edate - $sdate) / 60;
+        $premin = explode('.', $pmin);
+
+        $presec = $pmin-$premin[0];
+        $sec = $presec*60;
+
+        $timeshift = '00:'.round($premin[0],0).':'.zerofill(round($sec,0));
+
+    } elseif($time>=3600 && $time<=86399) {
+        // Hours + Minutes
+        $phour = ($edate - $sdate) / 3600;
+        $prehour = explode('.',$phour);
+
+        $premin = $phour-$prehour[0];
+        $min = explode('.',$premin*60);
+
+        $presec = '0.'.@$min[1];
+        $sec = $presec*60;
+
+        $timeshift = zerofill(round($prehour[0],0)).':'.zerofill(round($min[0],0)).':'.zerofill(round($sec,0));
+
+    } elseif($time>=86400) {
+        // Days + Hours + Minutes
+        $pday = ($edate - $sdate) / 86400;
+        $preday = explode('.',$pday);
+
+        $phour = $pday-$preday[0];
+        $prehour = explode('.',$phour*24);
+
+        $premin = ($phour*24)-$prehour[0];
+        $min = explode('.',$premin*60);
+
+        $presec = '0.'.@$min[1];
+        $sec = $presec*60;
+
+        $timeshift = round($preday[0],0).' '.zerofill(round($prehour[0],0)).':'.zerofill(round($min[0],0));
+
+    }
+    return $timeshift;
+}
+
 function segundos($dt1,$dt2){
     $y1 = substr($dt1,0,4);
     $m1 = substr($dt1,5,2);
@@ -695,11 +758,13 @@ mysql_query("insert into usuarios_online (fecha,ip, usuario) values (NOW(),'$ip'
 
 $stop = 1;
 
-if (in_array($_SERVER['REQUEST_URI'],array("index.php","pausa.php?p=1"))){
+if (in_array($_SERVER['REQUEST_URI'],array("/sicmol/index.php","pausa.php?p=1","/sicmol/POST.php"))){
     $stop = 0;
 }
 
-//if (($s_pausa==1)&&($stop==1)){die("<script>alert('Debes estar en estado Disponible para acceder'); location.href='http://".$_SERVER['HTTP_HOST']."s_pausaindex.php'</script>");}
+//die($_SERVER['REQUEST_URI']."ss");
+
+if (($s_pausa==1)&&($stop==1)){die("<script>alert('Debes estar en estado Disponible para acceder'); location.href='http://".$_SERVER['HTTP_HOST']."/sicmol/index.php'</script>");}
 
 function acceso_denegado($path = '', $perm = ''){
     die (header("location:http://".$_SERVER['HTTP_HOST']."/sicmol/acceso_denegado.php?path=".$path."&auth=".$perm));
@@ -719,5 +784,6 @@ function disponible($i){
 }
 
 function elimina_espacios($cadena){
+    //Eliminar espacios dentro de una frase
     return preg_replace('/( ){2,}/u',' ',$cadena);
 }

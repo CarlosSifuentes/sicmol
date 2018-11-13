@@ -6,9 +6,10 @@ $motivos = $mysqli->query($query_motivos);
     <div class="container" id="bottomContainer">
         <div class="row">
             <div class="col mr-auto text-black-50">
-                <i class="fa fa-user"></i> <?php echo $s_nombre_completo." [".$s_usuario."]" ?> <a href="?doLogout=true" title="Cerrar sesión" class="text-danger"><i class="fa fa-sign-out-alt fa-lg"></i></a>
-                <br>
-                Estado: <?php echo estado($s_pausa)  ?>
+                <?php echo $saludo.', '.$s_nombre_1.' '.estado($s_pausa) ?>
+                <?php if ($s_pausa==0){?>
+                <a href="?doLogout=true" title="Cerrar sesión" class="text-danger"><i class="fa fa-sign-out-alt fa-lg"></i></a>
+                <?php } ?>
             </div>
             <div class="col ml-auto text-right text-black-50">
                 <i class="far fa-clock"></i> <div id="servertime" class="text-right d-inline"></div>
@@ -17,6 +18,8 @@ $motivos = $mysqli->query($query_motivos);
     </div>
 </div>
 
+<!--Modal Pausa-->
+<input type="hidden" id="ruta_actual" value="<?php echo $ruta_actual ?>">
 <div class="modal" tabindex="-1" role="dialog" id="modalPausa">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
@@ -32,12 +35,14 @@ $motivos = $mysqli->query($query_motivos);
                     <option value="0">Elegir...</option>
                     <?php while ($rM = $motivos->fetch_assoc()) {
                         echo "<option value=\"".$rM['id']."\">".$rM['nombre']."</option>";
-                    } ;?>
+                    } ?>
                 </select>
+                <label for="obsPausa" class="mt-2">Observaciones</label>
+                <textarea id="obsPausa" name="obsPausa" class="form-control form-control-sm"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm btn-close" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-success btn-sm btn-save">Guardar</button>
+                <button type="button" class="btn btn-success btn-sm btn-save" id="btn-savePausa">Guardar</button>
             </div>
         </div>
     </div>

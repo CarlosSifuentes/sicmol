@@ -213,3 +213,54 @@ function texto_limpio(cadena) {
 $('#anc_pausa').click(function () {
     $('#modalPausa').modal()
 })
+
+$('#btn-savePausa').click(function () {
+    let motivo  = $('#motivoPausa').val();
+    let obs     = $('#obsPausa').val();
+    let ruta    = $('#ruta_actual').val();
+
+    let motivoEval = validate_select(motivo);
+    if (motivoEval !== ''){
+        validate_error('#motivoPausa', motivoEval, 'Motivo');
+        return false
+    } else {
+        $('#motivoPausa').removeClass('validate_red');
+    }
+
+    $.ajax({
+        url: '/sicmol/POST.php',
+        type: 'POST',
+        data:{
+            'option':'Pausa',
+            'motivo':motivo,
+            'obs'   :obs,
+            'op'    :0,
+            'ruta'  :ruta
+        },
+        success: function(data){
+            swal_ok(data);
+            $('#modalPausa').modal('hide');
+            setTimeout(function(){
+                location.href='/sicmol/index.php';
+                }, 3000);
+        }
+    })
+})
+
+$('#anc_conectar').click(function () {
+    $.ajax({
+        url: '/sicmol/POST.php',
+        type: 'POST',
+        data:{
+            'option':'Pausa',
+            'op':1
+        },
+        success: function(data){
+            swal_ok(data);
+            let ruta_ant = Cookies.get('ruta_anterior');
+            setTimeout(function(){
+                location.href=ruta_ant;
+            }, 3000);
+        }
+    })
+})

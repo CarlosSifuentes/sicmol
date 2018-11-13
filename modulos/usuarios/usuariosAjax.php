@@ -7,6 +7,7 @@
  */
 
 require_once '../../funciones/global.php';
+require_once 'funciones.php';
 
 $query_usuarios =
     'SELECT 
@@ -56,11 +57,11 @@ $usuarios = $mysqli->query($query_usuarios) or die ($mysqli->error);
         <th>DNI</th>
         <th>Usuario</th>
         <th>Contraseña</th>
-        <th>Extensión</th>
+        <th>Ext.</th>
         <th>Perfil</th>
         <th>Sede</th>
         <th>Area</th>
-        <th>Estado</th>
+        <th>Conexión</th>
         <th>Opción</th>
     </tr>
     </thead>
@@ -98,10 +99,14 @@ $usuarios = $mysqli->query($query_usuarios) or die ($mysqli->error);
             $anombre,
             $snombre
             ) = $row_usuarios;
+        $tiempo_pausa = '';
+        if ($pausa==1){
+            $tiempo_pausa = ' '.tiempo_transcurrido($ult_pausa);
+        }
     ?>
     <tr class="text-center">
         <td><?php echo $id ?></td>
-        <td><?php echo elimina_espacios($nombre_1.' '.$nombre_2.' '.$apellido_paterno.' '.$apellido_materno) ?></td>
+        <td class="text-left"><?php echo elimina_espacios($nombre_1.' '.$nombre_2.' '.$apellido_paterno.' '.$apellido_materno) ?></td>
         <td><?php echo $dni ?></td>
         <td><?php echo $usuario ?></td>
         <td><?php echo $clave ?></td>
@@ -109,7 +114,7 @@ $usuarios = $mysqli->query($query_usuarios) or die ($mysqli->error);
         <td><?php echo $pnombre ?></td>
         <td><?php echo $snombre ?></td>
         <td><?php echo $anombre ?></td>
-        <td><?php echo disponible($estado) ?></td>
+        <td><?php echo pausa_usuario($pausa, $id).$tiempo_pausa ?></td>
         <td>
             <a href="javascript:void(0)" title="Ver datos" class="text-info" onclick="ver_usuario(<?php echo $id ?>)"><i class="fa fa-search"></i></a>
             <?php if ($estado==1){ ?>
@@ -125,3 +130,8 @@ $usuarios = $mysqli->query($query_usuarios) or die ($mysqli->error);
     <?php } ?>
     </tbody>
 </table>
+<script>
+    function pausar(uid) {
+        console.log(uid);
+    }
+</script>
