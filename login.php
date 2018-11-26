@@ -8,9 +8,9 @@ if (isset($_POST['option'])){
     if ($option === 'Login'){
         $username = $_POST['username'];
         if ($op === '1'){
-            $query_username = "SELECT id FROM empleados WHERE usuario='".$username."'";
+            $query_username  = "SELECT id FROM empleados WHERE usuario='" . $username . "'";
             $result_username = $mysqli->query($query_username);
-            $existe = $result_username->num_rows;
+            $existe          = $result_username->num_rows;
             if ($existe>0){
                 echo 'ok';
             } else {
@@ -18,10 +18,10 @@ if (isset($_POST['option'])){
             }
             die();
         } else if ($op === '2'){
-            $password = $_POST['password'];
-            $query_login = "SELECT id FROM empleados WHERE BINARY  usuario='".$username."' AND BINARY clave='".$password."'";
+            $password     = $_POST['password'];
+            $query_login  = "SELECT id FROM empleados WHERE BINARY  usuario='" . $username . "' AND BINARY clave='" . $password . "'";
             $result_login = $mysqli->query($query_login);
-            $existe = $result_login->num_rows;
+            $existe       = $result_login->num_rows;
             //die ($existeL);
             if ($existe>0){
                 echo 'ok';
@@ -52,12 +52,12 @@ function elimina_espacios($cadena){
 }
 
 if (isset($_POST['username'])) {
-    $loginUsername=$_POST['username'];
-    $password=$_POST['password'];
-    $MM_fldUserAuthorization = "";
-    $MM_redirectLoginSuccess = "index.php";
-    $MM_redirectLoginFailed = "login.php";
-    $MM_redirecttoReferrer = true;
+    $loginUsername           = $_POST['username'];
+    $password                = $_POST['password'];
+    $MM_fldUserAuthorization = '';
+    $MM_redirectLoginSuccess = 'index.ph';
+    $MM_redirectLoginFailed  = 'login.php';
+    $MM_redirecttoReferrer   = true;
 
     $LoginRS__query = '
     SELECT
@@ -66,7 +66,7 @@ if (isset($_POST['username'])) {
     e.nombre_2,
     e.apellido_paterno,
     e.apellido_materno,
-    e.dni,
+    e.num_doc dni,
     e.fecha_nac,
     e.usuario,
     e.clave,
@@ -91,6 +91,8 @@ if (isset($_POST['username'])) {
     WHERE e.usuario = \''.$loginUsername.'\'
     AND e.clave = \''.$password.'\'
     AND e.estado = 1';
+
+    //die ($LoginRS__query);
 
     $LoginRS = $mysqli->query($LoginRS__query) or die ($mysqli->error);
     $loginFoundUser = $LoginRS->num_rows;

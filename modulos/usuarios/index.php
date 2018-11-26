@@ -76,6 +76,9 @@ setcookie('ruta', $ruta_actual,0,'/');
                     <li class="nav-item">
                         <a class="nav-link font-weight-bold text-app" id="perfiles-tab" data-toggle="tab" href="#perfil" role="tab" aria-controls="perfil" aria-selected="false">Perfiles</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link font-weight-bold text-app" id="documento-tab" data-toggle="tab" href="#documento" role="tab" aria-controls="documento" aria-selected="false">Tipo Documentos</a>
+                    </li>
                 </ul>
                 <div class="border-left border-bottom rounded-bottom border-right p-2">
                 <div class="tab-content" id="myTabContent">
@@ -90,6 +93,7 @@ setcookie('ruta', $ruta_actual,0,'/');
                         </div>
                         <div id="empleados"></div>
                     </div>
+
                     <div class="tab-pane fade" id="modulo" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="row">
                             <div class="col-6 text-left mb-2">
@@ -102,6 +106,7 @@ setcookie('ruta', $ruta_actual,0,'/');
                         <div id="modulos">
                         </div>
                     </div>
+
                     <div class="tab-pane fade" id="sede" role="tabpanel" aria-labelledby="contact-tab">
                         <div class="row">
                             <div class="col-6 text-left mb-2">
@@ -113,6 +118,7 @@ setcookie('ruta', $ruta_actual,0,'/');
                         </div>
                         <div id="sedes"></div>
                     </div>
+
                     <div class="tab-pane fade" id="area" role="tabpanel" aria-labelledby="contact-tab">
                         <div class="row">
                             <div class="col-6 text-left mb-2">
@@ -124,6 +130,7 @@ setcookie('ruta', $ruta_actual,0,'/');
                         </div>
                         <div id="areas"></div>
                     </div>
+
                     <div class="tab-pane fade" id="perfil" role="tabpanel" aria-labelledby="contact-tab">
                         <div class="row">
                             <div class="col-6 text-left mb-2">
@@ -135,6 +142,19 @@ setcookie('ruta', $ruta_actual,0,'/');
                         </div>
                         <div id="perfiles"></div>
                     </div>
+
+                    <div class="tab-pane fade" id="documento" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="row">
+                            <div class="col-6 text-left mb-2">
+                                <h5>Lista de Tipos de documentos</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a href="javascript:void(0)" id="newdocumento-btn" class="btn btn-primary btn-sm text-white btn-new">Nuevo tipo de documento</a>
+                            </div>
+                        </div>
+                        <div id="documentos"></div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -237,6 +257,9 @@ setcookie('ruta', $ruta_actual,0,'/');
     var $perfiles_tab = $('#perfiles-tab');
     var $perfiles = $('#perfiles');
 
+    var $documento_tab = $('#documento-tab');
+    var $documentos = $('#documentos');
+
     var $areas_tab = $('#areas-tab');
     var $areas = $('#areas');
 
@@ -249,28 +272,34 @@ setcookie('ruta', $ruta_actual,0,'/');
     var $usuarios_tab = $('#usuarios-tab');
     var $usuario = $('#empleados');
 
+    var $nombre_sap = $('#nombre_sap');
+
     $(function () {
         $usuario.load('usuariosAjax.php');
 
+        $documento_tab.click(function () {
+            $documentos.load('SAP-Ajax.php?op=Documento');
+        });
+
         $perfiles_tab.click(function () {
             $perfiles.load('SAP-Ajax.php?op=Perfil');
-        })
+        });
 
         $areas_tab.click(function () {
             $areas.load('SAP-Ajax.php?op=Área');
-        })
+        });
 
         $sedes_tab.click(function () {
             $sedes.load('SAP-Ajax.php?op=Sede');
-        })
+        });
 
         $modulos_tab.click(function () {
             $modulos.load('modulosAjax.php');
-        })
+        });
 
         $usuarios_tab.click(function () {
             $usuario.load('usuariosAjax.php');
-        })
+        });
 
         $('#newsede-btn').click(function () {
             $('#modalSedeAreaPerfil-Titulo').html('Nueva sede');
@@ -289,6 +318,22 @@ setcookie('ruta', $ruta_actual,0,'/');
                 keyboard:false
             });
         })
+
+        $('#newdocumento-btn').click(function () {
+            $('#modalSedeAreaPerfil-Titulo').html('Nuevo tipo de documento');
+            $('#op').val('Documento');
+            $('#modalSedeAreaPerfil').modal({
+                backdrop:'static',
+                keyboard:false
+            });
+            $('#modalSedeAreaPerfil').on('shown.bs.modal', function() {
+                $nombre_sap.focus()
+            });
+        });
+
+        /*$nombre_sap.keyup(function () {
+            mayuscula($nombre_sap);
+        })*/
 
         $('#newarea-btn').click(function () {
             $('#modalSedeAreaPerfil-Titulo').html('Nueva área');
@@ -344,7 +389,7 @@ setcookie('ruta', $ruta_actual,0,'/');
                 swal_ok(data[0]+' agregado/a correctamente');
                 $nombre.val('');
                 $('#modalSedeAreaPerfil').modal('hide');
-                $('#'+data[1]).load('SAP-Ajax.php?op='+data[0]);
+                $('#'+data[2]).load('SAP-Ajax.php?op='+data[0]);
             }
         })
     })
@@ -603,7 +648,7 @@ setcookie('ruta', $ruta_actual,0,'/');
                     url = 'usuariosAjax.php';
                 }
                 swal_ok(data[0]);
-                $('#'+data[1]).load(url);
+                $('#'+data[3]).load(url);
             },
             error: function () {
                 swal_validar('No es posible eliminar este registro');

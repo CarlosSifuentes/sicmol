@@ -26,6 +26,7 @@ if (isset($_GET['new']) || isset($_GET['mod'])){
     $nombre_2 = $_POST['txt-nombre_2'];
     $apellido_1 = $_POST['txt-apellido_paterno'];
     $apellido_2 = $_POST['txt-apellido_materno'];
+    $tdoc = $_POST['sel-tdoc'];
     $dni = $_POST['txt-dni'];
     $fecha_nac = fecha_mysql($_POST['txt-fecha_nac']);
     $direccion = $_POST['txt-direccion'];
@@ -69,7 +70,8 @@ if (isset($_GET['new']) || isset($_GET['mod'])){
     nombre_2 = '$nombre_2',
     apellido_paterno = '$apellido_1',
     apellido_materno = '$apellido_2',
-    dni = '$dni',
+    tipo_doc = $tdoc,
+    num_doc = '$dni',
     fecha_nac = '$fecha_nac',
     direccion = '$direccion',
     correo = '$correo',
@@ -103,7 +105,9 @@ else if (isset($_GET['id'])){
     nombre_2,
     apellido_paterno,
     apellido_materno,
-    dni,
+    e.tipo_doc,
+    td.nombre tdnombre,
+    num_doc dni,
     fecha_nac,
     direccion,
     correo,
@@ -116,17 +120,20 @@ else if (isset($_GET['id'])){
     fecha_ingreso,
     foto,
     app,
-    estado
+    e.estado
     FROM
-    empleados
+    empleados e
+    JOIN tipo_documento td on e.tipo_doc = td.id
     WHERE
-    id = '.$id;
+    e.id = '.$id;
     $usuario = $mysqli->query($query_usuario) or die ($mysqli->error);
     list (
         $nombre_1,
         $nombre_2,
         $apellido_paterno,
         $apellido_materno,
+        $tdoc,
+        $tipo_doc,
         $dni,
         $fecha_nac,
         $direccion,
@@ -192,6 +199,17 @@ $query_apps =
     app';
 $apps = $mysqli->query($query_apps) or die ($mysqli->error);
 
+$query_tipo_documentos =
+    'SELECT
+    id,
+    nombre
+    FROM
+    tipo_documento
+    WHERE
+    estado '.$estado_val.'
+    ORDER BY 
+    nombre';
+$tipo_documentos = $mysqli->query($query_tipo_documentos) or die ($mysqli->error);
 ?>
 <div class="row">
     <div class="col">
@@ -216,8 +234,21 @@ $apps = $mysqli->query($query_apps) or die ($mysqli->error);
             </div>
         </div>
         <div class="row tiny-gutters">
-            <div class="form-group col-6">
-                <label for="txt-dni">DNI</label>
+            <div class="form-group col-4">
+                <label for="sel-tdoc">Tipo Documento</label>
+                <select id="sel-tdoc" name="sel-tdoc" data-placeholder="Elegir sede" class="form-control form-control-sm">
+                    <option value=""></option>
+                    <?php
+                    while ($row_tdocs = $tipo_documentos->fetch_row()){
+                        $tdoc_id = $row_tdocs[0];
+                        $tdoc_nom = $row_tdocs[1];
+                        ?>
+                        <option value="<?php echo $tdoc_id ?>"><?php echo $tdoc_nom ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="form-group col-4">
+                <label for="txt-dni">N° Documento</label>
                 <input type="text" class="form-control form-control-sm" id="txt-dni" name="txt-dni" maxlength="8">
             </div>
             <div class="form-group col">
@@ -373,6 +404,7 @@ $('#txt-nombre_1').val('<?php echo $nombre_1 ?>');
 $('#txt-nombre_2').val('<?php echo $nombre_2 ?>');
 $('#txt-apellido_paterno').val('<?php echo $apellido_paterno ?>');
 $('#txt-apellido_materno').val('<?php echo $apellido_materno ?>');
+$('#sel-tdoc').val(<?php echo $tdoc ?>).chosen({width:'100%', 'disable_search':true});
 $('#txt-dni').val('<?php echo $dni ?>');
 $('#txt-fecha_nac').val('<?php echo formato_fecha($fecha_nac) ?>');
 $('#txt-direccion').val('<?php echo $direccion ?>');
@@ -389,6 +421,6 @@ $('#sel-permisos').chosen({width:'100%'});
 if (isset($_GET['view'])){
     ?>
 $('#form-nuevoUsuario :input').prop('readonly', true);
-$('#sel-sede, #sel-area, #sel-perfil, #sel-permisos').attr('disabled', true).trigger('chosen:updated');
+$('#sel-sede, #sel-area, #sel-perfil, #sel-permisos, #sel-tdoc').attr('disabled', true).trigger('chosen:updated');
 <?php } ?>
 </script>

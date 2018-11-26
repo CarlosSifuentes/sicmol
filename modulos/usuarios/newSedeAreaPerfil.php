@@ -11,14 +11,22 @@ $op = $_POST['op'];
 
 if ($op === 'Perfil') {
     $table = 'perfiles';
+    $div = 'perfiles';
 } else if ($op === 'Área') {
     $table = 'areas';
+    $div = 'areas';
 } else if ($op === 'Sede') {
     $table = 'sedes';
+    $div = 'sedes';
  } else if ($op === 'Módulo') {
     $table = 'modulos';
+    $div = 'modulos';
 } else if ($op === 'Usuario') {
     $table = 'empleados';
+    $div = 'empleados';
+} else if ($op === 'Documento') {
+    $table = 'tipo_documento';
+    $div = 'documentos';
 }
 
 if (isset($_POST['val'])){
@@ -40,27 +48,21 @@ else if (isset($_POST['del'])){
         $msg = 'Estado de '.$op.' actualizado correctamente';
     } else if ($del==2){
         $disable = 'DELETE FROM '.$table.' WHERE id='.$id;
-        $msg = $op.' elimnado correctamente';
+        $msg = $op.' eliminado correctamente';
     }
     $mysqli->query($disable) or die ($mysqli->error);
-    $result = array($msg, $table, $op);
+    $result = array($msg, $table, $op, $div);
     echo json_encode($result);
     exit();
 }
 else {
 
     if ($op=='Módulo'){
-        $app = "'".$_POST['app']."'";
-        $tclientes = "'".$_POST['tclientes']."'";
-        $tgestiones = "'".$_POST['tgestiones']."'";
-        $tventas = "'".$_POST['tventas']."'";
-        $insert = 'INSERT INTO 
-        '.$table.' 
-        SET 
-        app='.$app.', 
-        tclientes='.$tclientes.', 
-        tgestiones='.$tgestiones.', 
-        tventas='.$tventas;
+        $app        = "'" . $_POST['app'] . "'";
+        $tclientes  = "'" . $_POST['tclientes'] . "'";
+        $tgestiones = "'" . $_POST['tgestiones'] . "'";
+        $tventas    = "'" . $_POST['tventas'] . "'";
+        $insert     = 'INSERT INTO '.$table .' SET app='.$app .', tclientes='. $tclientes.', tgestiones='. $tgestiones .', tventas='. $tventas;
         if (!$mysqli->query($insert)) {
            printf("Error: %s\n", $mysqli->error);
         } else {
@@ -68,13 +70,17 @@ else {
             exit();
         }
 
-    } else {$nombre = "'".$_POST['nombre']."'";
+    } else {
+        $nombre = "'".$_POST['nombre']."'";
+        if ($op === 'Documento'){$nombre = strtoupper($nombre);}
         $insert = 'INSERT INTO '.$table.' SET nombre='.$nombre;
         if (!$mysqli->query($insert)) {
-            printf("Error: %s\n", $mysqli->error);
+            printf("Error: %s\n", $mysqli->error.error_mysql($insert));
         } else {
-            $result = array($op, $table);
+            $result = array($op, $table, $div);
+
             echo json_encode($result);
+
             exit();
         }
     }

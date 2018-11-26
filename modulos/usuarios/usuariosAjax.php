@@ -16,7 +16,8 @@ $query_usuarios =
     e.nombre_2,
     e.apellido_paterno,
     e.apellido_materno,
-    e.dni,
+    td.nombre tdnombre,
+    e.num_doc dni,
     e.fecha_nac,
     e.usuario,
     e.clave,
@@ -45,6 +46,7 @@ $query_usuarios =
     JOIN perfiles p ON e.perfil = p.id
     JOIN areas a on e.area = a.id
     JOIN sedes s on e.sede = s.id
+    JOIN tipo_documento td on e.tipo_doc = td.id
     ORDER BY
     e.id';
 $usuarios = $mysqli->query($query_usuarios) or die ($mysqli->error);
@@ -54,7 +56,8 @@ $usuarios = $mysqli->query($query_usuarios) or die ($mysqli->error);
     <tr class="th_all text-center">
         <th>ID</th>
         <th>Nombres</th>
-        <th>DNI</th>
+        <th>Tipo Doc</th>
+        <th>Num Doc</th>
         <th>Usuario</th>
         <th>Contraseña</th>
         <th>Ext.</th>
@@ -74,6 +77,7 @@ $usuarios = $mysqli->query($query_usuarios) or die ($mysqli->error);
             $nombre_2,
             $apellido_paterno,
             $apellido_materno,
+            $tipo_doc,
             $dni,
             $fecha_nac,
             $usuario,
@@ -107,6 +111,7 @@ $usuarios = $mysqli->query($query_usuarios) or die ($mysqli->error);
     <tr class="text-center">
         <td><?php echo $id ?></td>
         <td class="text-left"><?php echo elimina_espacios($nombre_1.' '.$nombre_2.' '.$apellido_paterno.' '.$apellido_materno) ?></td>
+        <td><?php echo $tipo_doc ?></td>
         <td><?php echo $dni ?></td>
         <td><?php echo $usuario ?></td>
         <td><?php echo $clave ?></td>

@@ -1,6 +1,6 @@
 <?php
-$query_motivos = 'SELECT id, nombre FROM rh_motivos_ausencia WHERE id > 2';
-$motivos = $mysqli->query($query_motivos);
+$query_motivos = 'SELECT id, nombre FROM emp_tipo_estado WHERE id > 2';
+$motivos_estado = $mysqli->query($query_motivos);
 ?>
 <div class="container-fluid bg-light fixed-bottom p-2">
     <div class="container" id="bottomContainer">
@@ -33,7 +33,7 @@ $motivos = $mysqli->query($query_motivos);
                 <label for="motivoPausa">Motivo</label>
                 <select name="motivoPausa" id="motivoPausa" class="form-control">
                     <option value="0">Elegir...</option>
-                    <?php while ($rM = $motivos->fetch_assoc()) {
+                    <?php while ($rM = $motivos_estado->fetch_assoc()) {
                         echo "<option value=\"".$rM['id']."\">".$rM['nombre']."</option>";
                     } ?>
                 </select>

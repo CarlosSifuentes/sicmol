@@ -92,30 +92,30 @@ if (!((isset($_SESSION['MM_Username'])) && (isAuthorized("",$MM_authorizedUsers,
 }
 
 setlocale(LC_ALL, 'es_PE');
-$s_usuario = $_SESSION['MM_Username'];
-$s_id = $_SESSION['id'];
-$s_sede = $_SESSION['sede'];
-$s_sede_nom = $_SESSION['sede_nom'];
-$s_nombres = $_SESSION['nombres'];
-$s_apellidos = $_SESSION['apellidos'];
+$s_usuario         = $_SESSION['MM_Username'];
+$s_id              = $_SESSION['id'];
+$s_sede            = $_SESSION['sede'];
+$s_sede_nom        = $_SESSION['sede_nom'];
+$s_nombres         = $_SESSION['nombres'];
+$s_apellidos       = $_SESSION['apellidos'];
 $s_nombre_completo = $_SESSION['nombre_completo'];
-$s_nombre_1 = $_SESSION['nombre_1'];
-$s_nombre_2 = $_SESSION['nombre_2'];
-$s_area = $_SESSION['area'];
-$s_app = $_SESSION['app'];
-$s_perfil = $_SESSION['perfil'];
-$s_nivel = $_SESSION['nivel'];
-$s_ext = $_SESSION['ext'];
-$s_correo = $_SESSION['mail'];
+$s_nombre_1        = $_SESSION['nombre_1'];
+$s_nombre_2        = $_SESSION['nombre_2'];
+$s_area            = $_SESSION['area'];
+$s_app             = $_SESSION['app'];
+$s_perfil          = $_SESSION['perfil'];
+$s_nivel           = $_SESSION['nivel'];
+$s_ext             = $_SESSION['ext'];
+$s_correo          = $_SESSION['mail'];
 
 $s_pausa = 0;
 if (isset($_SESSION['pausa'])&&$_SESSION['pausa']==1){
     $s_pausa = $_SESSION['pausa'];
 } else {
-    $sql_pausa = "SELECT pausa FROM empleados WHERE id=".$s_id;
+    $sql_pausa    = "SELECT pausa FROM empleados WHERE id=" . $s_id;
     $result_pausa = $mysqli->query($sql_pausa);
-    $row_pausa = $result_pausa->fetch_row();
-    $s_pausa = $row_pausa[0];
+    $row_pausa    = $result_pausa->fetch_row();
+    $s_pausa      = $row_pausa[0];
 }
 //die($s_pausa);
 function estado ($pausa){
@@ -307,8 +307,8 @@ function calculaedad($fechanacimiento){
     if ($fechanacimiento!=""){
         list($dia,$mes,$ano) = explode("/",$fechanacimiento);
         $ano_diferencia  = date("Y") - $ano;
-        $mes_diferencia = date("m") - $mes;
-        $dia_diferencia   = date("d") - $dia;
+        $mes_diferencia  = date("m") - $mes;
+        $dia_diferencia  = date("d") - $dia;
         if ($dia_diferencia < 0 || $mes_diferencia < 0)
         {$ano_diferencia--;}}
     else {$ano_diferencia="";}
@@ -551,9 +551,9 @@ class OS_BR{
     }
 }
 
-$ruta = $_SERVER['SCRIPT_NAME'];
-$ip = $_SERVER['REMOTE_ADDR'];
-$ruta_actual = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+$ruta        = $_SERVER['SCRIPT_NAME'];
+$ip          = $_SERVER['REMOTE_ADDR'];
+$ruta_actual = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
 
 $obj = new OS_BR();
 // // if you want to show one by one information then try showInfo() function

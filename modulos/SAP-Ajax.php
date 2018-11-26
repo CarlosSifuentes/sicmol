@@ -6,7 +6,7 @@
  * Time: 11:58 PM
  */
 
-include '../../funciones/global.php';
+include '../funciones/global.php';
 
 $op = $_GET['op'];
 
@@ -14,6 +14,8 @@ if ($op === 'Perfil') {
     $table = 'perfiles';
 } else if ($op === 'Área') {
     $table = 'areas';
+} else if ($op === 'Especialidad') {
+    $table = 'especialidades';
 } else if ($op === 'Sede') {
     $table = 'sedes';
 } else if ($op === 'Documento') {

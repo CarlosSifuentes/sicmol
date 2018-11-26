@@ -6,7 +6,7 @@
  * Time: 9:52 PM
  */
 
-require_once("funciones/global.php");
+require_once 'funciones/global.php';
 ?>
 <!doctype html>
 <html>
